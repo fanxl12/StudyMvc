@@ -13,7 +13,7 @@ public class SuccessKilled {
 
     private short state;
 
-    private Date createDate;
+    private Date createTime;
 
     //多对一
     private Seckill seckill;
@@ -42,12 +42,12 @@ public class SuccessKilled {
         this.state = state;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Seckill getSeckill() {
@@ -64,7 +64,7 @@ public class SuccessKilled {
                 "seckillId=" + seckillId +
                 ", userPhone=" + userPhone +
                 ", state=" + state +
-                ", createDate=" + createDate +
+                ", createTime=" + createTime +
                 '}';
     }
 }
