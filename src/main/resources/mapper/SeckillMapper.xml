@@ -14,7 +14,7 @@
         AND number > 0
     </update>
 
-    <select id="queryById" resultType="Seckill" parameterType="Long">
+    <select id="queryById" resultType="Seckill" parameterType="long">
         SELECT seckill_id, name, number, start_time, end_time, create_time
         from seckill
         where seckill_id=#{seckillId};
