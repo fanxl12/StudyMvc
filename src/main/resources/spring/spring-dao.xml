@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans.xsd"
-       xmlns:context="http://www.springframework.org/schema/context">
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.3.xsd"
+       >
 
     <!-- 1.数据库相关参数配置-->
     <context:property-placeholder location="classpath:jdbc.properties "/>
@@ -12,16 +15,16 @@
     <!-- 2.数据库连接池 -->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
         <!-- 配置连接池属性 -->
-        <property name="driverClass" value="${driver}"/>
-        <property name="jdbcUrl" value="${url}"/>
-        <property name="user" value="${username}"/>
-        <property name="password" value="${password}"/>
+        <property name="driverClass" value="${jdbc.driver}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
 
         <!-- c3p0的私有属性 -->
-        <property name="maxPoolSize" value="30"/>
+        <property name="maxPoolSize" value="20"/>
         <property name="minPoolSize" value="10"/>
         <property name="autoCommitOnClose" value="false"/>
-        <property name="checkoutTimeout" value="1000"/>
+        <property name="checkoutTimeout" value="2000"/>
         <property name="acquireRetryAttempts" value="2"/>
     </bean>
 
@@ -34,15 +37,15 @@
         <!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
         <property name="typeAliasesPackage" value="com.fanxl.studymvc.entity"/>
         <!-- 显式指定Mapper文件位置 -->
-        <property name="mapperLocations" value="classpath:/mybatis/*Mapper.xml"/>
+        <property name="mapperLocations" value="classpath:/mapper/*Mapper.xml"/>
     </bean>
 
     <!-- 4.配置扫码Dao接口包 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <!-- 注入qlSessionFactory-->
-        <property name="sqlSessionFactoryBeanName" ref="sqlSessionFactory"/>
         <!-- 给出需要扫码Dao接口的包 -->
-        <property name="basePackage" value="com.fanxl.studymvc.dao" />
+        <property name="basePackage" value="com.fanxl.studymvc.dao"/>
+        <!-- 注入qlSessionFactory-->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
 
 </beans>
