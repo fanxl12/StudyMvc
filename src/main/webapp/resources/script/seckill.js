@@ -16,6 +16,22 @@ var seckill = {
             return false;
         }
     },
+    //计时逻辑处理
+    countdown: function (seckillId, nowTime, startTime, endTime) {
+
+        var seckillBox = $('#seckill-box');
+        //时间判断
+        if (nowTime > endTime){
+            seckillBox.html('秒杀结束！');
+        }else if (nowTime < startTime){
+            //秒杀未开始，倒计时
+
+
+        }else {
+
+        }
+    },
+
     //详情页秒杀逻辑
     detail:{
         //详情页初始化
@@ -23,9 +39,6 @@ var seckill = {
             //手机验证和登录， 计时交互
             //在cookie中查找手机号码
             var killPhone = $.cookie('killPhone');
-            var startTime = params['startTime'];
-            var endTime = params['endTime'];
-            var seckillId = params['seckillId'];
             //验证手机号码
             if (!seckill.validatePhone(killPhone)) {
                 //绑定Phone
@@ -51,7 +64,21 @@ var seckill = {
                 });
             };
             //已经登录了
-            // $.get()
+            var startTime = params['startTime'];
+            var endTime = params['endTime'];
+            var seckillId = params['seckillId'];
+
+            $.get(seckill.URL.now(), {}, function (result) {
+
+                if (result && result['success']){
+                    var nowTime = result['data'];
+                    //时间判断
+                    seckill.countdown(seckillId, nowTime, startTime, endTime);
+                }else {
+                    console.log('result='+result);
+                }
+
+            })
         }
     }
 }
