@@ -63,5 +63,17 @@
 <script src="http://cdn.bootcss.com/jquery.countdown/2.0.2/jquery.countdown.js"></script>
 <!-- 开始编写交互逻辑 -->
 <script src="/resources/script/seckill.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(function () {
+        //使用EL表达式传入参数
+        seckill.detail.init({
+            seckillId : ${seckill.seckillId},
+            startTime : ${seckill.startTime.time},
+            endTime : ${seckill.endTime.time}
+        });
+    });
+
+</script>
 </body>
 </html>

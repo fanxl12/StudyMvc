@@ -4,14 +4,54 @@
 var seckill = {
     //封装秒杀相关ajax的url
     URL:{
-
+        now: function () {
+            return '/seckill/time/now';
+        }
+    },
+    //验证手机号码
+    validatePhone: function (phone) {
+        if (phone && phone.length==11 && !isNaN(phone)){
+            return true;
+        }else {
+            return false;
+        }
     },
     //详情页秒杀逻辑
     detail:{
         //详情页初始化
         init : function (params) {
             //手机验证和登录， 计时交互
-
+            //在cookie中查找手机号码
+            var killPhone = $.cookie('killPhone');
+            var startTime = params['startTime'];
+            var endTime = params['endTime'];
+            var seckillId = params['seckillId'];
+            //验证手机号码
+            if (!seckill.validatePhone(killPhone)) {
+                //绑定Phone
+                //控制输出
+                var killPhoneModel = $('#killPhoneModal');
+                //显示弹出层
+                killPhoneModel.modal({
+                    show:true, //显示弹出层
+                    backdrop:'static', //禁止位置关闭
+                    keyboard:false //关闭键盘事件
+                });
+                $('#killPhoneBtn').click(function () {
+                    var inputPhone = $('#killphoneKey').val();
+                    console.log('inputPhone='+inputPhone); //TODO
+                    if (seckill.validatePhone(inputPhone)){
+                        //电话写入cookie
+                        $.cookie('killPhone', inputPhone, {expires: 7, path: '/seckill'});
+                        //刷新页面
+                        window.location.reload();
+                    }else {
+                        $('#killphoneMessage').hide().html('<label class="label label-danger">手机号码输入错误！</label>').show(300);
+                    }
+                });
+            };
+            //已经登录了
+            // $.get()
         }
     }
 }

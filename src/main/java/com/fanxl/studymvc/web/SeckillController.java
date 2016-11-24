@@ -1,5 +1,6 @@
 package com.fanxl.studymvc.web;
 
+import com.fanxl.studymvc.dto.SeckillResult;
 import com.fanxl.studymvc.entity.Seckill;
 import com.fanxl.studymvc.service.SeckillService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +44,13 @@ public class SeckillController {
         }
         model.addAttribute("seckill", seckill);
         return "detail";
+    }
+
+    @RequestMapping(value = "/time/now", method = RequestMethod.GET)
+    @ResponseBody
+    public SeckillResult<Long> now(){
+        Date date = new Date();
+        return new SeckillResult<Long>(true, date.getTime());
     }
 
 }
