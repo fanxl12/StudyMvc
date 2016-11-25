@@ -8,6 +8,14 @@ var seckill = {
             return '/seckill/time/now';
         }
     },
+    //处理秒杀逻辑
+    handleSeckill: function (seckillId, node) {
+
+        node.hide()
+            .html(); //按钮
+
+
+    },
     //验证手机号码
     validatePhone: function (phone) {
         if (phone && phone.length==11 && !isNaN(phone)){
@@ -25,10 +33,20 @@ var seckill = {
             seckillBox.html('秒杀结束！');
         }else if (nowTime < startTime){
             //秒杀未开始，倒计时
-
+            var killTime = new Date(startTime+1000);
+            seckillBox.countdown(killTime, function (event) {
+                //时间格式
+                var format = event.strftime('秒杀倒计时: %D天 %H时 %M分 %S秒');
+                seckillBox.html(format);
+                //计时完成后的回调事件
+            }).on('finish.countdown', function () {
+                //获取秒杀地址 控制显示逻辑 执行秒杀
+                seckill.handleSeckill(seckillId, seckillBox);
+            });
 
         }else {
-
+            //秒杀开始
+            seckill.handleSeckill(seckillId, seckillBox);
         }
     },
 
