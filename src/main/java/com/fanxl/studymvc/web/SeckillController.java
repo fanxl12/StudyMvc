@@ -1,15 +1,19 @@
 package com.fanxl.studymvc.web;
 
+import com.fanxl.studymvc.dto.Exposer;
+import com.fanxl.studymvc.dto.SeckillExecution;
 import com.fanxl.studymvc.dto.SeckillResult;
 import com.fanxl.studymvc.entity.Seckill;
+import com.fanxl.studymvc.exception.RepeatKillException;
+import com.fanxl.studymvc.exception.SeckillCloseException;
+import com.fanxl.studymvc.enums.SeckillStateEnum;
 import com.fanxl.studymvc.service.SeckillService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -20,6 +24,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/seckill")
 public class SeckillController {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private SeckillService seckillService;
@@ -44,6 +50,54 @@ public class SeckillController {
         }
         model.addAttribute("seckill", seckill);
         return "detail";
+    }
+
+    // ajax json接口
+    @RequestMapping(value = "/{seckillId}/exposer",
+            method = RequestMethod.POST,
+            produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public SeckillResult<Exposer> exposer(@PathVariable("seckillId") Long seckillId){
+        SeckillResult<Exposer> seckillResult;
+
+        try {
+            Exposer exposer = seckillService.exportSeckillUrl(seckillId);
+            seckillResult = new SeckillResult<Exposer>(true, exposer);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            seckillResult = new SeckillResult<Exposer>(false, e.getMessage());
+        }
+        return seckillResult;
+    }
+
+    // /seckill/1000/fadd652b5e105b816145afd12772d98b/execution
+
+    @RequestMapping(value = "/{seckillId}/{md5}/execution",
+            method = RequestMethod.POST,
+            produces = {"application/json;charset=UTF-8"})
+    @ResponseBody
+    public SeckillResult<SeckillExecution> execute(@PathVariable("seckillId") Long seckillId,
+                                                   @CookieValue(value = "killPhone",required = false) Long userPhone,
+                                                   @PathVariable("md5")String md5){
+
+        logger.info("我要秒杀了");
+
+        SeckillResult<SeckillExecution> seckillResult;
+        try {
+            SeckillExecution seckillExecution = seckillService.executeSeckill(seckillId,userPhone,md5);
+            seckillResult = new SeckillResult<SeckillExecution>(true,seckillExecution);
+        }catch (RepeatKillException e){
+            SeckillExecution seckillExecution = new SeckillExecution(seckillId, SeckillStateEnum.REPEAT_KILL);
+            seckillResult = new SeckillResult<SeckillExecution>(true, seckillExecution);
+        }catch (SeckillCloseException e){
+            SeckillExecution seckillExecution = new SeckillExecution(seckillId, SeckillStateEnum.END);
+            seckillResult = new SeckillResult<SeckillExecution>(true, seckillExecution);
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            SeckillExecution seckillExecution = new SeckillExecution(seckillId, SeckillStateEnum.INNER_ERROR);
+            seckillResult = new SeckillResult<SeckillExecution>(true, seckillExecution);
+        }
+        return seckillResult;
     }
 
     @RequestMapping(value = "/time/now", method = RequestMethod.GET)
