@@ -5,20 +5,99 @@
          version="3.1"
          metadata-complete="true">
 
-        <!-- 配置DispatcherServlet -->
-        <servlet>
-            <servlet-name>seckill-dispatcher</servlet-name>
-            <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-            <!-- 配置springMvc需要加载的配置文件-->
-            <init-param>
-                <param-name>contextConfigLocation</param-name>
-                <param-value>classpath:spring/spring-*.xml</param-value>
-            </init-param>
-        </servlet>
-        <servlet-mapping>
-            <servlet-name>seckill-dispatcher</servlet-name>
-            <!-- 默认匹配所有的请求-->
-            <url-pattern>/</url-pattern>
-        </servlet-mapping>
+    <!-- Spring -->
+    <!-- 配置Spring配置文件路径 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            <!--classpath*:applicationContext.xml-->
+            classpath*:applicationContext-shiro.xml
+        </param-value>
+    </context-param>
+    <!-- 配置Spring上下文监听器 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <!-- Spring -->
+
+    <!-- 配置Spring字符编码过滤器 -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- shiro 安全过滤器 -->
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <async-supported>true</async-supported>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Spring MVC 核心控制器 DispatcherServlet 配置 -->
+    <servlet>
+        <servlet-name>seckill-dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- 配置springMvc需要加载的配置文件-->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring/spring-*.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>seckill-dispatcher</servlet-name>
+        <!-- 默认匹配所有的请求-->
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- sitemesh 拼接web页面 header和footer -->
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!-- end sitemesh -->
+
+    <error-page>
+        <exception-type>org.apache.shiro.authz.AuthorizationException</exception-type>
+        <location>/WEB-INF/jsp/error/page-401.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/WEB-INF/jsp/error/page-500.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/jsp/error/page-500.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/jsp/error/page-404.jsp</location>
+    </error-page>
+
 
 </web-app>
