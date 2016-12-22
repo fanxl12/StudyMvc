@@ -16,7 +16,7 @@
     <!--</mapping>-->
 
     <!-- 指明满足“/exclude.jsp”的页面，将被排除，不被装饰 -->
-    <mapping path="/login.jsp" exclue="true" />
+    <!--<mapping path="/user/*" exclue="true" />-->
 
     <!-- 指明满足“/*”的页面，将被“/WEB-INF/views/decorators/decorator.html”所装饰 -->
     <mapping path="/*" decorator="/WEB-INF/jsp/decorators/default.jsp" />

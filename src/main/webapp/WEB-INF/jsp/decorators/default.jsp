@@ -27,13 +27,15 @@
 <body>
 
 <div class="container">
-    <header>header</header>
+
+    <%@ include file="header.jsp"%>
 
     <div id="content">
         <sitemesh:write property='body'/>
     </div>
 
-    <footer>footer</footer>
+    <%@ include file="footer.jsp"%>
+
 </div>
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->

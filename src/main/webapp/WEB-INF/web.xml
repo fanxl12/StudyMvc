@@ -82,6 +82,10 @@
     </filter-mapping>
     <!-- end sitemesh -->
 
+    <session-config>
+        <session-timeout>20</session-timeout>
+    </session-config>
+
     <error-page>
         <exception-type>org.apache.shiro.authz.AuthorizationException</exception-type>
         <location>/WEB-INF/jsp/error/page-401.jsp</location>

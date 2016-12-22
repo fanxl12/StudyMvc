@@ -32,7 +32,7 @@ public class SecurityRealm extends AuthorizingRealm {
 //    private PermissionService permissionService;
 
     /**
-     * 权限检查
+     * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
@@ -57,7 +57,7 @@ public class SecurityRealm extends AuthorizingRealm {
     }
 
     /**
-     * 登录验证
+     * 认证回调函数,登录时调用.
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {

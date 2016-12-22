@@ -12,7 +12,21 @@
         (2)提供一系列：数据绑定，数字和日期的format @NumberFormat, @DataTimeFormat,
         xml/json默认读写支持
     -->
-    <mvc:annotation-driven/>
+    <!--<mvc:annotation-driven/>-->
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg value="UTF-8" />
+            </bean>
+            <!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="prettyPrint" value="true"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+
 
     <!-- 2.静态资源默认servlet配置
          (1)加入对静态资源的处理：js, gif,png
@@ -32,5 +46,14 @@
 
     <!-- 设置默认页面 -->
     <mvc:view-controller path="/" view-name="index"/>
+
+    <!-- 将Controller抛出的异常转到特定View, 保持SiteMesh的装饰效果 -->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.Throwable">error/page-500</prop>
+            </props>
+        </property>
+    </bean>
 
 </beans>
