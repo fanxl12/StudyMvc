@@ -44,7 +44,7 @@
     <context:component-scan base-package="com.fanxl.studymvc.web"/>
 
     <!-- 设置默认页面 -->
-    <mvc:view-controller path="/" view-name="index"/>
+    <mvc:view-controller path="/" view-name="redirect:/index"/>
 
     <!-- 将Controller抛出的异常转到特定View, 保持SiteMesh的装饰效果 -->
     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
