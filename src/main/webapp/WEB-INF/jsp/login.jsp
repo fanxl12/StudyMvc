@@ -1,11 +1,3 @@
-<%@ page import="org.apache.shiro.web.filter.authc.FormAuthenticationFilter" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: fanxl2
-  Date: 2016/12/22
-  Time: 13:00
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -14,7 +6,7 @@
 <body>
 
 <h3 class="form-title">用户登录</h3>
-<form action="/user/login" method="post" class="form-signin">
+<form action="/user/login" method="post">
     <%
         String error = (String) request.getAttribute("error");
         if (error!=null){

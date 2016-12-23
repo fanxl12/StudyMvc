@@ -39,11 +39,12 @@ public class SeckillServiceImpl implements SeckillService{
     @Autowired
     private SuccessKilledDao successKilledDao;
 
-
+    @Override
     public List<Seckill> getSeckillList() {
         return seckillDao.queryAll(0, 4);
     }
 
+    @Override
     public Seckill getById(long seckillId) {
         return seckillDao.queryById(seckillId);
     }
